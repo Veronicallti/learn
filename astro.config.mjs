@@ -8,7 +8,7 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     starlight({
-      title: '学习笔记',
+      title: 'Veronica 的学习笔记',
       description: '语言与计算机科学的学习记录',
       defaultLocale: 'root',
       locales: {

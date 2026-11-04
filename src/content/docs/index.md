@@ -1,5 +1,5 @@
 ---
-title: 学习笔记
+title: 总览
 description: 语言与计算机科学的学习记录
 template: splash
 hero:
