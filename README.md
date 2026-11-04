@@ -1,51 +1,69 @@
-# 学习资料库
+# learn
+
+语言与计算机科学的学习笔记。仓库本身是一个 [Astro](https://astro.build/) + [Starlight](https://starlight.astro.build/) 站点，Markdown 直接放在 `src/content/docs/` 下，推送即发布。
+
+- 线上地址：<https://veronicallti.github.io/learn/>
+- 本地预览：`npm install && npm run dev`
+- 构建：`npm run build`（产物在 `dist/`）
 
 ## 目录结构
 
 ```
 learn/
-├── _inbox/                # 收件箱：随手存，周末整理归档
-├── _templates/            # 笔记 / 项目模板
-├── language/              # 语言类
-│   ├── README.md
-│   ├── english/
-│   └── japanese/
-└── computer-science/      # 计算机类
-    ├── README.md
-    ├── 00-foundations/    # 计算机组成、操作系统、网络等基础
-    ├── 01-programming/    # 编程语言（按语言再分）
-    ├── 02-math/           # 数学基础
-    ├── 03-algorithms/     # 数据结构与算法
-    ├── 04-data-and-databases/
-    ├── 05-systems/        # Linux / 网络 / 分布式
-    ├── 06-ai-ml/
-    ├── 07-projects/       # 动手项目代码
-    └── 99-resources/      # 书、课程、链接
+├── src/
+│   ├── content.config.ts        # 内容集合（docs / i18n）
+│   ├── content/docs/            # ← 所有笔记都在这里
+│   │   ├── index.md             # 站点首页
+│   │   ├── language/
+│   │   │   ├── index.md
+│   │   │   ├── english/{index.md,notes,vocabulary,grammar,practice,resources}
+│   │   │   └── japanese/…
+│   │   └── computer-science/
+│   │       ├── index.md
+│   │       ├── 00-foundations/
+│   │       ├── 01-programming/{index.md,python,c,cpp,javascript}
+│   │       ├── 02-math/ 03-algorithms/ 04-data-and-databases/
+│   │       ├── 05-systems/ 06-ai-ml/ 07-projects/ 99-resources/
+│   ├── styles/custom.css        # 主题色
+│   └── content/i18n/            # UI 文案（暂时空）
+├── public/favicon.svg
+├── _inbox/                      # 收件箱，不参与构建
+├── _templates/note.md           # 笔记模板
+├── astro.config.mjs             # site / base / 侧边栏
+└── .github/workflows/deploy.yml # 推送到 main 自动发布
 ```
+
+## 写笔记
+
+1. 新东西先丢 `_inbox/`，周末归档到对应主题目录。
+2. 从 `_templates/note.md` 复制，命名为 `YYYY-MM-DD-主题.md`。
+3. **frontmatter 必须有 `title`**（Starlight 用它生成页面标题和侧边栏），否则构建失败。
+4. 想控制侧边栏顺序，加：
+
+```yaml
+sidebar:
+  order: 3
+  label: 显示名称
+```
+
+5. `git add -A && git commit -m "note: xxx" && git push`，约 1 分钟后线上生效。
+
+## 新增分类
+
+- **新语言**：`cp -r src/content/docs/language/english src/content/docs/language/korean`，改 `index.md` 的标题；侧边栏自动出现。
+- **新学科**：在 `src/content/docs/` 下建目录并写 `index.md`，然后在 `astro.config.mjs` 的 `sidebar` 里加一组：
+
+```js
+{ label: '数学', items: [{ autogenerate: { directory: 'math' } }] },
+```
+
+## 部署
+
+仓库 Settings → Pages → **Source 选 "GitHub Actions"**，之后推到 `main` 即自动构建发布到 `https://veronicallti.github.io/learn/`。
+
+> 站点部署在子路径 `/learn`，`astro.config.mjs` 里的 `base: '/learn'` 和仓库名必须一致。若以后换到自定义域名或根路径，需要同步修改。
 
 ## 约定
 
-1. **顶层只放大类**（domain）。以后新增方向直接建同级目录，例如 `math/`、`design/`、`economics/`，不影响已有结构。
-2. **每个大类一个 README.md**，当作该类的索引 / 学习路线，不再往下到处放 README。
-3. **层级控制在 3 层以内**：`大类 / 主题 / 文件`。第 4 层用文件名表达，不要用目录。
-4. **文件命名**：`YYYY-MM-DD-主题.md`，例如 `2025-11-04-tcp-handshake.md`。同一天的序号可加后缀 `-2`。
-5. **数字前缀**只用于希望固定排序的分类（`00-`、`99-resources`）；中间新增分类直接用名字，避免反复重命名。
-6. **下划线开头**的目录（`_inbox`、`_templates`）是工具目录，排在列表最前，不算学习内容。
-7. **代码与笔记分开**：项目的代码放 `computer-science/07-projects/项目名/`，学习笔记仍留在对应知识点目录，笔记里链接到项目。
-8. 资料原文（PDF、课件、音频）放各主题的 `resources/`，自己写的东西放 `notes/`，避免混在一起。
-
-## 新增一个领域的做法
-
-```bash
-# 新增一门语言
-cp -r language/english language/korean
-
-# 新增一个大类
-mkdir -p design/{notes,resources} && touch design/README.md
-```
-
-## 归档节奏
-
-- 日常：一切新东西先丢 `_inbox/`，不用想放哪。
-- 每周：`_inbox/` 清空，归入对应主题；在主题 README 里加一行索引。
-- 每月：回看 README 索引，删掉过时的，补上"待学"清单。
+- 层级不超过 3 层，再往下用文件名表达。
+- 大文件（教材 PDF、视频）不要提交进 Git：单文件上限 100MB，仓库建议 <1GB，放网盘后在笔记里贴链接。

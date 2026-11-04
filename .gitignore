@@ -5,3 +5,8 @@
 # 临时文件
 *.tmp
 ~$*
+
+# Astro / Node
+node_modules/
+dist/
+.astro/

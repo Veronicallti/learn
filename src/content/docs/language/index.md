@@ -1,4 +1,12 @@
-# Language
+---
+title: 语言
+description: 英语、日语的学习笔记、词汇、语法与练习索引
+sidebar:
+  label: 语言
+  order: 1
+---
+
+# 语言
 
 语言学习。每门语言一个目录，结构统一：
 
@@ -20,4 +28,4 @@
 
 ## 待加
 
-- 新增语言：`cp -r english <新语言>`，然后在上面表格加一行。
+- 新增语言：`cp -r src/content/docs/language/english src/content/docs/language/<新语言>`，改 `index.md` 的标题，然后在上面表格加一行。

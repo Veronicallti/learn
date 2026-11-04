@@ -1,4 +1,12 @@
-# Computer Science
+---
+title: 计算机科学
+description: 计算机基础、编程语言、算法、系统、AI 与项目索引
+sidebar:
+  label: 计算机科学
+  order: 2
+---
+
+# 计算机科学
 
 ## 各目录职责
 
